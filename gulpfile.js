@@ -6,7 +6,9 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     connect = require('gulp-connect'),
     open = require('gulp-open'),
-    gutil = require('gulp-util');
+    gutil = require('gulp-util'),
+    concat = require('gulp-concat'),
+    autoprefixer = require('gulp-autoprefixer');
 
 var DEST_FOLDER = './dest/';
 var SRC_FOLDER = './src/';
@@ -33,10 +35,11 @@ gulp.task('openURL', function(){
 gulp.task('process-vendors', function(){
   return gulp.src([
     "node_modules/react/dist/react.js",
+    "node_modules/react-dom/dist/react-dom.js",
     "node_modules/react/dist/react-with-addons.js",
     "node_modules/requirejs/require.js"
   ])
-    .pipe(gulp.dest(DEST_FOLDER + "js/vendors"))
+    .pipe(gulp.dest(DEST_FOLDER + "js/vendor"))
 });
 
 gulp.task('process-js', function() {
@@ -55,18 +58,27 @@ gulp.task('process-html', function() {
 });
 
 gulp.task('process-sass', function() {
-  return gulp.src(SRC_FOLDER + 'style/*.scss')
+  return gulp.src(SRC_FOLDER + 'style/main.scss')
     .pipe(plumber())
     .pipe(sass())
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions']
+    }))
     .pipe(plumber.stop())
     .pipe(gulp.dest(DEST_FOLDER + 'style/'))
     .pipe(connect.reload());
+});
+
+gulp.task('copy-files', function(){
+  return gulp.src(SRC_FOLDER + '**/*')
+    .pipe(gulp.dest(DEST_FOLDER))
 });
 
 gulp.task('watch', function(){
   gulp.watch(SRC_FOLDER + 'js/**/*.js', ['process-js']);
   gulp.watch(SRC_FOLDER + 'style/**/*.scss', ['process-sass']);
   gulp.watch(SRC_FOLDER + 'index.html', ['process-html']);
+  //gulp.watch(SRC_FOLDER + '**/*', ['copy-files']);
 });
 
 gulp.task('default', ['clean'], function(){

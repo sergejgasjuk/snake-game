@@ -1,0 +1,142 @@
+$greenSea:      #16a085;
+$pumpkin:       #d35400;
+$orange:        #f39c12;
+$pomegranate:   #c0392b;
+$clouds:        #ecf0f1;
+$asbestos:      #7f8c8d;
+$concrete:      #95a5a6;
+
+$cellSize: 25px;
+$rows: 12;
+$cols: 12;
+$borderWidth: 1px;
+
+.game {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+
+  &__field {
+    //height: $cellSize * $rows + 2;
+    //width: $cellSize * $cols + 2;
+    background-color: lighten($clouds, 2%);
+    border: $borderWidth solid $asbestos;
+  }
+
+  &__panel {
+    min-width: 150px;
+    background-color: $asbestos;
+  }
+}
+
+.field-row {
+  display: flex;
+  //background: white;
+}
+
+.field-cell {
+  height: $cellSize;
+  width: $cellSize;
+  box-shadow: 0 0 1px $greenSea inset;
+}
+
+//.snake {
+//  position: relative;
+//  display: table;
+//  margin: 25px auto;
+//  padding-left: 35px;
+//  font: bold 1.1em Verdana;
+//  text-align: center;
+//  text-transform: uppercase;
+//  line-height: 1.5;
+//  user-select: none;
+//
+//  &__field-wrap {
+//    position: relative;
+//    height: $cellSize * $rows + 2;
+//    width: $cellSize * $cols + 2;
+//    background-color: lighten($clouds, 2%);
+//    border: 1px solid $asbestos;
+//  }
+//
+//  &__cell {
+//    float: left;
+//    height: $cellSize;
+//    width: $cellSize;
+//    text-align: center;
+//    box-shadow: 0 0 1px $greenSea inset;
+//
+//    &--food {
+//      background-color: $orange;
+//    }
+//
+//    &--snake {
+//      background-color: $asbestos;
+//    }
+//  }
+//
+//  &__lives {
+//    position: absolute;
+//    left: 5px;
+//    top: 50%;
+//    margin-top: -(20px * 3);
+//  }
+//
+//  &__life {
+//    position: relative;
+//    width: auto;
+//    height: 20px;
+//    margin: 0 0 10px;
+//
+//    &:before,
+//    &:after {
+//      position: absolute;
+//      content: "";
+//      left: 12px;
+//      top: 0;
+//      width: 12px;
+//      height: 20px;
+//      background: red;
+//      border-radius: 80px 80px 0 0;
+//      transform: rotate(-45deg);
+//      transform-origin: 0 100%;
+//    }
+//
+//    &:after {
+//      left: 0;
+//      transform: rotate(45deg);
+//      transform-origin: 100% 100%;
+//    }
+//  }
+//
+//  &__field-overlay {
+//    position: absolute;
+//    top: 0;
+//    left: 0;
+//    display: flex;
+//    align-items: center;
+//    height: 100%;
+//    width: 100%;
+//    padding: 5%;
+//    font: bold 1.3em Verdana;
+//    text-align: center;
+//    text-transform: uppercase;
+//    line-height: 1.5;
+//    background: rgba($asbestos, 0.75);
+//    z-index: 10;
+//
+//    span,
+//    div {
+//      margin: auto;
+//    }
+//
+//    .game-over {
+//      font-size: 1.3em;
+//      margin: 0 0 15px;
+//    }
+//  }
+//
+//  &__snake__score {
+//    padding: 5px;
+//  }
+//}
