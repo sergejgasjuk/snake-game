@@ -15,6 +15,7 @@ $borderWidth: 1px;
   display: flex;
   justify-content: center;
   align-items: stretch;
+	font-family: Verdana;
 
   &__field {
     //height: $cellSize * $rows + 2;
@@ -24,7 +25,9 @@ $borderWidth: 1px;
   }
 
   &__panel {
-    min-width: 150px;
+    min-width: 200px;
+	  padding: 25px;
+	  color: #fff;
     background-color: $pomegranate;
   }
 }
