@@ -69,12 +69,41 @@ class Game extends React.Component {
         snakeHead.x = 0;
     }
 
-    let snakeTail = snake.pop();
-    snake.unshift(snakeHead);
-    grid[snakeTail.y][snakeTail.x] = EMPTY_CELL_VAL;
-    snake.forEach((cell, i) => grid[cell.y][cell.x] = SNAKE_CELL_VAL);
+    if (grid[snakeHead.y][snakeHead.x] === FOOD_CELL_VAL) {
+      snake.unshift(snakeHead);
+      snake.forEach((cell, i) => grid[cell.y][cell.x] = SNAKE_CELL_VAL);
+      //this.setFood(grid);
+      //points += 1;
+      let emptyCells = this.getEmptyCells(grid);
+      let randomPos = utls.getRandomPos.apply(this, [emptyCells]);
+      grid[randomPos.y][randomPos.x] = FOOD_CELL_VAL;
+    } else if (grid[snakeHead.y][snakeHead.x] === SNAKE_CELL_VAL) {
+      clearInterval(this.loop);
+      this.loop = null;
+    } else {
+      let snakeTail = snake.pop();
+      snake.unshift(snakeHead);
+      grid[snakeTail.y][snakeTail.x] = EMPTY_CELL_VAL;
+      snake.forEach((cell, i) => grid[cell.y][cell.x] = SNAKE_CELL_VAL);
+    }
 
     this.setState({grid, snake});
+  }
+
+  changeDirection(e) {
+    let key = e.keyCode;
+    let direction = this.state.direction;
+
+    if (key === KEY_LEFT && direction !== "right")
+      direction = "left";
+    if (key === KEY_UP && direction !== "down")
+      direction = "up";
+    if (key === KEY_RIGHT && direction !== "left")
+      direction = "right";
+    if (key === KEY_DOWN && direction !== "up")
+      direction = "down";
+
+    this.setState({direction});
   }
 
   getEmptyCells(arr) {
@@ -162,6 +191,14 @@ class Game extends React.Component {
 
     return snake;
 
+  }
+
+  componentDidMount() {
+    document.body.addEventListener("keydown", this.changeDirection.bind(this));
+  }
+
+  componentWillUnmount() {
+    document.body.removeEventListener("keydown", this.changeDirection.bind(this));
   }
 
   render() {
