@@ -1,6 +1,7 @@
 import React from "reactWithAddons";
 import ReactDom from "reactDom";
 import * as utls from "utils/helpers"
+import SnakeGame from "components/SnakeGame"
 
 // constants
 const COLS = 12; // x
@@ -13,7 +14,7 @@ const KEY_LEFT = 37,
       KEY_RIGHT = 39,
       KEY_DOWN = 40;
 
-class Game extends React.Component {
+class Games extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -24,7 +25,7 @@ class Game extends React.Component {
     // direction
     this.state.direction = 'up';
     // speed
-    this.state.speed = 500;
+    this.state.speed = 300;
     // snake
     this.state.snake = this.generateSnakeObject(this.state.direction);
     this.state.snake.forEach((cell, i) => this.state.grid[cell.y][cell.x] = SNAKE_CELL_VAL);
@@ -146,7 +147,7 @@ class Game extends React.Component {
 
   generateSnakeObject(direction) {
     let snake = [],
-        length = 2, // snake length
+        length = 5, // snake length
         x,
         y;
 
@@ -234,4 +235,4 @@ class Game extends React.Component {
   }
 }
 
-ReactDom.render(<Game/>, document.getElementById("container"));
+ReactDom.render(<SnakeGame/>, document.getElementById("container"));
