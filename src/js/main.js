@@ -23,6 +23,8 @@ class Game extends React.Component {
     this.state.grid = utls.generateGrid.apply(this, [this.state.cols, this.state.rows, EMPTY_CELL_VAL]);
     // direction
     this.state.direction = 'up';
+    // speed
+    this.state.speed = 500;
     // snake
     this.state.snake = this.generateSnakeObject(this.state.direction);
     this.state.snake.forEach((cell, i) => this.state.grid[cell.y][cell.x] = SNAKE_CELL_VAL);
@@ -31,6 +33,48 @@ class Game extends React.Component {
     this.state.randomPos = utls.getRandomPos.apply(this, [this.state.emptyCells]);
     this.state.grid[this.state.randomPos.y][this.state.randomPos.x] = FOOD_CELL_VAL;
 
+    //game loop
+    this.loop = setInterval(this.updateGame.bind(this), this.state.speed);
+  }
+
+  updateGame() {
+    let grid = this.state.grid.slice(0);
+    let snake = this.state.snake.slice(0);
+    let {direction, speed} = this.state;
+    let snakeHead = {y: snake[0].y, x: snake[0].x};
+
+    switch (direction) {
+      case 'left':
+        snakeHead.x -= 1;
+        break;
+      case 'up':
+        snakeHead.y -= 1;
+        break;
+      case 'right':
+        snakeHead.x += 1;
+        break;
+      case 'down':
+        snakeHead.y += 1;
+        break;
+    }
+
+    if (grid[snakeHead.y] === undefined || grid[snakeHead.y][snakeHead.x] === undefined) {
+      if (snakeHead.y < 0)
+        snakeHead.y = grid.length - 1;
+      if (snakeHead.y >= grid.length)
+        snakeHead.y = 0;
+      if (snakeHead.x < 0)
+        snakeHead.x = grid[0].length - 1;
+      if (snakeHead.x >= grid[0].length)
+        snakeHead.x = 0;
+    }
+
+    let snakeTail = snake.pop();
+    snake.unshift(snakeHead);
+    grid[snakeTail.y][snakeTail.x] = EMPTY_CELL_VAL;
+    snake.forEach((cell, i) => grid[cell.y][cell.x] = SNAKE_CELL_VAL);
+
+    this.setState({grid, snake});
   }
 
   getEmptyCells(arr) {
@@ -122,7 +166,7 @@ class Game extends React.Component {
 
   render() {
     let e = this.state.snake;
-    console.log(e);
+    //console.log(e);
 
     // TODO: refactor
     let setCellClassName = (val) => {
