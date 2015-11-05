@@ -25,7 +25,7 @@ $borderWidth: 1px;
 
   &__panel {
     min-width: 150px;
-    background-color: $asbestos;
+    background-color: $pomegranate;
   }
 }
 
@@ -38,6 +38,14 @@ $borderWidth: 1px;
   height: $cellSize;
   width: $cellSize;
   box-shadow: 0 0 1px $greenSea inset;
+
+  &--food {
+    background-color: $orange;
+  }
+
+  &--snake {
+    background-color: $asbestos;
+  }
 }
 
 //.snake {
