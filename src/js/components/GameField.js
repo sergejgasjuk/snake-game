@@ -2,6 +2,8 @@ import React from "reactWithAddons";
 import ReactDom from "reactDom";
 import * as utls from "../utils/helpers"
 
+import PlayerActions from "../actions/PlayerActions";
+
 // constants
 const COLS = 12; // x
 const ROWS = 12; // y
@@ -13,7 +15,7 @@ const KEY_LEFT = 37,
       KEY_RIGHT = 39,
       KEY_DOWN = 40;
 
-class SnakeGameField extends React.Component {
+class GameField extends React.Component {
   constructor(props) {
     super(props);
 
@@ -73,6 +75,7 @@ class SnakeGameField extends React.Component {
       snake.forEach((cell, i) => grid[cell.y][cell.x] = SNAKE_CELL_VAL);
       //this.setFood(grid);
       //points += 1;
+      this.setPlayerPoints();
       let emptyCells = this.getEmptyCells(grid);
       let randomPos = utls.getRandomPos.apply(this, [emptyCells]);
       grid[randomPos.y][randomPos.x] = FOOD_CELL_VAL;
@@ -87,6 +90,10 @@ class SnakeGameField extends React.Component {
     }
 
     this.setState({grid, snake});
+  }
+
+  setPlayerPoints() {
+    PlayerActions.setPoints();
   }
 
   getEmptyCells(arr) {
@@ -228,4 +235,4 @@ class SnakeGameField extends React.Component {
   }
 }
 
-export default SnakeGameField;
+export default GameField;
