@@ -48,7 +48,7 @@ class GameField extends React.Component {
     let snake = this.state.snake.slice(0);
     let {direction} = this.state;
     let snakeHead = {y: snake[0].y, x: snake[0].x};
-    let lives = this.state.playerData.lives;
+    let lives = this.props.lives;
 
     switch (direction) {
       case 'left':
@@ -85,10 +85,32 @@ class GameField extends React.Component {
       let randomPos = utls.getRandomPos.apply(this, [emptyCells]);
       grid[randomPos.y][randomPos.x] = FOOD_CELL_VAL;
     } else if (grid[snakeHead.y][snakeHead.x] === SNAKE_CELL_VAL) {
-      PlayerActions.looseLife();
       clearInterval(this.loop);
       this.loop = null;
-      console.log(lives);
+      PlayerActions.looseLife();
+
+      if (lives - 1 > 0) {
+        setTimeout(function(){
+          //this.clearGrid();
+          //this.setElements();
+          grid.forEach((row, y) => {
+            row.forEach((cell, x) => {
+              grid[y][x] = EMPTY_CELL_VAL;
+            });
+          });
+
+          this.setState({
+            grid: grid
+          });
+
+          if (this.loop == null) {
+            this.loop = setInterval(this.updateGame.bind(this), this.state.speed);
+          }
+
+        }.bind(this), 500);
+      } else {
+        alert("game over!");
+      }
 
       return;
     } else {
@@ -100,14 +122,6 @@ class GameField extends React.Component {
 
     this.setState({grid, snake});
   }
-
-  //setPlayerPoints() {
-  //  PlayerActions.setPoints();
-  //}
-  //
-  //removePlayerLife() {
-  //  PlayerActions.looseLife();
-  //}
 
   getEmptyCells(arr) {
     let emptyCells = [];
@@ -211,26 +225,15 @@ class GameField extends React.Component {
     return snake;
   }
 
-  onPlayerDataChange() {
-    this.setState({
-      playerData: PlayerStore.getPlayerData()
-    });
-  }
-
   componentDidMount() {
     document.body.addEventListener("keydown", this.changeDirection.bind(this));
-
-    this.unsubscribe = PlayerStore.listen(this.onPlayerDataChange.bind(this));
   }
 
   componentWillUnmount() {
     document.body.removeEventListener("keydown", this.changeDirection.bind(this));
-
-    this.unsubscribe();
   }
 
   render() {
-
     // TODO: refactor
     let setCellClassName = (val) => {
       if (val === SNAKE_CELL_VAL) {

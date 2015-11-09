@@ -14,6 +14,8 @@ class Game extends React.Component {
 
     this.state = {};
     this.state.gameStarted = PlayerStore.getPlayerData().gameStarted;
+    this.state.lives = PlayerStore.getPlayerData().lives;
+    this.state.points = PlayerStore.getPlayerData().points;
   }
 
   onStartGame(e) {
@@ -25,15 +27,24 @@ class Game extends React.Component {
   }
 
   onGameStatusChange() {
-    let gameStarted = PlayerStore.getPlayerData().gameStarted;
-    this.setState({gameStarted});
+    this.setState({gameStarted: PlayerStore.getPlayerData().gameStarted});
+  }
+
+  onLivesChange() {
+    this.setState({lives: PlayerStore.getPlayerData().lives});
+  }
+
+  onPointsChange() {
+    this.setState({points: PlayerStore.getPlayerData().points});
   }
 
   componentDidMount() {
     document.addEventListener("keydown", this.onStartGame.bind(this));
 
     this.unsubscribe = [
-      PlayerStore.listen(this.onGameStatusChange.bind(this))
+      PlayerStore.listen(this.onGameStatusChange.bind(this)),
+      PlayerStore.listen(this.onLivesChange.bind(this)),
+      PlayerStore.listen(this.onPointsChange.bind(this))
     ];
   }
 
@@ -44,8 +55,8 @@ class Game extends React.Component {
   render() {
     return (
       <div className="sg-wrap">
-        <GameField/>
-        <PlayerPanel/>
+        <GameField lives={this.state.lives} />
+        <PlayerPanel lives={this.state.lives} points={this.state.points}/>
         {!true &&
           <div className="sg-overlay">
 
