@@ -6,6 +6,7 @@ import GameField from "./GameField";
 import PlayerPanel from "./PlayerPanel";
 
 import PlayerStore from "../stores/PlayerStore";
+import PlayerActions from "../actions/PlayerActions";
 
 class Game extends React.Component {
   constructor(props) {
@@ -13,32 +14,41 @@ class Game extends React.Component {
 
     this.state = {};
     this.state.gameStarted = PlayerStore.getPlayerData().gameStarted;
-    this.state.fuck = 1;
   }
 
-  startGame(e) {
-    if (e.keyCode !== 13) {
-      return false;
+  onStartGame(e) {
+    if (e.keyCode === 13 && !this.state.gameStarted) {
+      PlayerActions.startGame();
     }
 
-    //let fuck = this.state.fuck + 1;
-    //
-    //this.setState({fuck});
-    //this.setState({gameStarted: !this.state.gameStarted});
+    return false;
+  }
+
+  onGameStatusChange() {
+    let gameStarted = PlayerStore.getPlayerData().gameStarted;
+    this.setState({gameStarted});
   }
 
   componentDidMount() {
-    document.addEventListener("keydown", this.startGame.bind(this));
+    document.addEventListener("keydown", this.onStartGame.bind(this));
+
+    this.unsubscribe = [
+      PlayerStore.listen(this.onGameStatusChange.bind(this))
+    ];
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe.map((fn) => fn());
   }
 
   render() {
     return (
       <div className="sg-wrap">
-        <GameField started={this.state.gameStarted}/>
+        <GameField/>
         <PlayerPanel/>
-        {this.state.gameStarted &&
+        {!true &&
           <div className="sg-overlay">
-            fuck
+
           </div>
         }
       </div>

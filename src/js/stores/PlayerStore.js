@@ -13,7 +13,7 @@ let PlayerStore = Reflux.createStore({
     this.trigger(_gameStarted);
   },
 
-  onSetPoints() {
+  onReceivePoints() {
     _points += +1;
     this.trigger(_points);
   },
