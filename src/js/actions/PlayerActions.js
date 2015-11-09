@@ -1,7 +1,9 @@
 import Reflux from "reflux";
 
 let PlayerActions = Reflux.createActions([
-  "setPoints"
+  "setPoints",
+  "looseLife",
+  "startGame"
 ]);
 
 export default PlayerActions;

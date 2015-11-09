@@ -1,1 +1,2 @@
-### snake-game
+# Snake Game
+## with reactJS & es6

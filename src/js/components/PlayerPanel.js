@@ -10,16 +10,23 @@ class PlayerPanel extends React.Component {
 
     this.state = {};
     this.state.points = PlayerStore.getPlayerData().points;
+    this.state.lives = PlayerStore.getPlayerData().lives;
   }
 
-  onGetPoints() {
+  onPointsUpdate() {
     let points = PlayerStore.getPlayerData().points;
     this.setState({points});
   }
 
+  onLivesUpdate() {
+    let lives = PlayerStore.getPlayerData().lives;
+    this.setState({lives});
+  }
+
   componentDidMount() {
     this.unsubscribe = [
-      PlayerStore.listen(this.onGetPoints.bind(this))
+      PlayerStore.listen(this.onPointsUpdate.bind(this)),
+      PlayerStore.listen(this.onLivesUpdate.bind(this))
     ];
   }
 
@@ -28,10 +35,17 @@ class PlayerPanel extends React.Component {
   }
 
   render() {
+    let playerLives = [];
+    for (let i = 0, l = this.state.lives; i < l; i += 1) {
+      playerLives.push(<div className="sg-player-life" key={`life-${i+1}`}></div>);
+    }
+
     return (
-      <div className="snake-game__panel">
-        <div>Score: {this.state.points}</div>
-        <div className=""></div>
+      <div className="sg-player-panel">
+        <div className="sg-player-points">Points: {this.state.points}</div>
+        <div className="sg-player-lives">
+          {playerLives}
+        </div>
       </div>
     )
   }

@@ -62,10 +62,10 @@ gulp.task('process-sass', function() {
   return gulp.src(SRC_FOLDER + 'style/main.scss')
     .pipe(plumber())
     .pipe(sass())
+    .pipe(plumber.stop())
     .pipe(autoprefixer({
       browsers: ['last 2 versions']
     }))
-    .pipe(plumber.stop())
     .pipe(gulp.dest(DEST_FOLDER + 'style/'))
     .pipe(connect.reload());
 });

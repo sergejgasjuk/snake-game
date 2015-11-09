@@ -2,6 +2,7 @@ import React from "reactWithAddons";
 import ReactDom from "reactDom";
 import * as utls from "../utils/helpers"
 
+import PlayerStore from "../stores/PlayerStore";
 import PlayerActions from "../actions/PlayerActions";
 
 // constants
@@ -36,13 +37,15 @@ class GameField extends React.Component {
     this.state.grid[this.state.randomPos.y][this.state.randomPos.x] = FOOD_CELL_VAL;
     //game loop
     this.loop = setInterval(this.updateGame.bind(this), this.state.speed);
+    //this.loop = null;
   }
 
   updateGame() {
     let grid = this.state.grid.slice(0);
     let snake = this.state.snake.slice(0);
-    let {direction, speed} = this.state;
+    let {direction} = this.state;
     let snakeHead = {y: snake[0].y, x: snake[0].x};
+    let lives = PlayerStore.getPlayerData().lives;
 
     switch (direction) {
       case 'left':
@@ -73,15 +76,36 @@ class GameField extends React.Component {
     if (grid[snakeHead.y][snakeHead.x] === FOOD_CELL_VAL) {
       snake.unshift(snakeHead);
       snake.forEach((cell, i) => grid[cell.y][cell.x] = SNAKE_CELL_VAL);
-      //this.setFood(grid);
-      //points += 1;
       this.setPlayerPoints();
+      this.removePlayerLife();
       let emptyCells = this.getEmptyCells(grid);
       let randomPos = utls.getRandomPos.apply(this, [emptyCells]);
       grid[randomPos.y][randomPos.x] = FOOD_CELL_VAL;
     } else if (grid[snakeHead.y][snakeHead.x] === SNAKE_CELL_VAL) {
+      this.removePlayerLife();
       clearInterval(this.loop);
       this.loop = null;
+      console.log(PlayerStore.getPlayerData().lives);
+      //clearInterval(this.loop);
+      //this.loop = null;
+      //this.removePlayerLife();
+      //
+      //if (lives > 0) {
+      //  setTimeout(function(){
+      //    this.clearGrid();
+      //    this.setElements();
+      //
+      //    if (this.loop == null) {
+      //      this.loop = setInterval(this.updateGame.bind(this), this.state.speed);
+      //    }
+      //
+      //    this.setState({lives});
+      //  }.bind(this), 500);
+      //} else {
+      //  this.setState({});
+      //}
+
+      return;
     } else {
       let snakeTail = snake.pop();
       snake.unshift(snakeHead);
@@ -94,6 +118,10 @@ class GameField extends React.Component {
 
   setPlayerPoints() {
     PlayerActions.setPoints();
+  }
+
+  removePlayerLife() {
+    PlayerActions.looseLife();
   }
 
   getEmptyCells(arr) {
@@ -206,27 +234,34 @@ class GameField extends React.Component {
     document.body.removeEventListener("keydown", this.changeDirection.bind(this));
   }
 
+  componentWillReceiveProps() {
+    //if (this.props.started) {
+    //  this.loop = setInterval(this.updateGame.bind(this), this.state.speed);
+    //  return false;
+    //}
+    //
+    //this.loop = null;
+  }
+
   render() {
-    let e = this.state.snake;
-    //console.log(e);
 
     // TODO: refactor
     let setCellClassName = (val) => {
       if (val === SNAKE_CELL_VAL) {
-        return "field-cell--snake";
+        return "sg-field-cell--snake";
       } else if (val === FOOD_CELL_VAL) {
-        return "field-cell--food";
+        return "sg-field-cell--food";
       } else {
         return '';
       }
     };
 
     return (
-      <div className="snake-game__field">
+      <div className="sg-field">
         {this.state.grid.map((row, y) =>
-            <div className="field-row" key={`row_${y}`}>
+            <div className="sg-field-row" key={`row_${y}`}>
             {row.map((cell, x) =>
-                <div className={`field-cell ` + setCellClassName(cell)} key={`cell_y=${y}_x=${x}`}></div>
+                <div className={`sg-field-cell ` + setCellClassName(cell)} key={`cell_y=${y}_x=${x}`}></div>
             )}
             </div>
         )}

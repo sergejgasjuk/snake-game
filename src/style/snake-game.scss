@@ -5,39 +5,39 @@ $pomegranate:   #c0392b;
 $clouds:        #ecf0f1;
 $asbestos:      #7f8c8d;
 $concrete:      #95a5a6;
+$black: #000;
+$white: #fff;
 
 $cellSize: 25px;
 $rows: 12;
 $cols: 12;
 $borderWidth: 1px;
 
-.snake-game {
-  display: flex;
+.sg-wrap {
+  position: relative;
+  display: inline-flex;
   justify-content: center;
   align-items: stretch;
-	font-family: Verdana;
-
-  &__field {
-    //height: $cellSize * $rows + 2;
-    //width: $cellSize * $cols + 2;
-    background-color: lighten($clouds, 2%);
-    border: $borderWidth solid $asbestos;
-  }
-
-  &__panel {
-    min-width: 200px;
-	  padding: 25px;
-	  color: #fff;
-    background-color: $pomegranate;
-  }
+  font-family: Verdana;
 }
 
-.field-row {
+.sg-field {
+  background-color: lighten($clouds, 2%);
+  border: $borderWidth solid $asbestos;
+}
+
+.sg-player-panel {
+  min-width: 200px;
+  padding: 25px;
+  color: #fff;
+  background-color: $pomegranate;
+}
+
+.sg-field-row {
   display: flex;
-  //background: white;
 }
 
-.field-cell {
+.sg-field-cell {
   height: $cellSize;
   width: $cellSize;
   box-shadow: 0 0 1px $greenSea inset;
@@ -48,7 +48,56 @@ $borderWidth: 1px;
 
   &--snake {
     background-color: $asbestos;
+    box-shadow: none;
   }
+}
+
+.sg-player-lives {
+  display: flex;
+  justify-content: space-around;
+}
+
+.sg-player-life {
+  position: relative;
+  width: auto;
+  height: 20px;
+
+  &:before,
+  &:after {
+    position: absolute;
+    content: "";
+    left: 12px;
+    top: 0;
+    width: 12px;
+    height: 20px;
+    background: red;
+    border-radius: 80px 80px 0 0;
+    transform: rotate(-45deg);
+    transform-origin: 0 100%;
+  }
+
+  &:after {
+    left: 0;
+    transform: rotate(45deg);
+    transform-origin: 100% 100%;
+  }
+}
+
+.sg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 5%;
+  font: bold 1.3em Verdana;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1.5;
+  background: rgba($black, 0.5);
+  z-index: 10;
 }
 
 //.snake {
